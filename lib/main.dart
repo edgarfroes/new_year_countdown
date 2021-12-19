@@ -43,6 +43,11 @@ class LanguageSelector extends StatelessWidget {
     'en-US': 'Inglês',
   };
 
+  final _back = {
+    'pt-BR': 'Voltar',
+    'en-US': 'Go back',
+  };
+
   _renderFlag({
     required String language,
     required String flagAsset,
@@ -75,6 +80,7 @@ class LanguageSelector extends StatelessWidget {
               Text(
                 _languageName[language]!,
                 style: const TextStyle(
+                  fontFamily: 'Arial',
                   color: Colors.white,
                   height: 2,
                   fontWeight: FontWeight.w900,
@@ -98,6 +104,7 @@ class LanguageSelector extends StatelessWidget {
             testText,
             textAlign: TextAlign.center,
             style: TextStyle(
+              fontFamily: 'Arial',
               height: 1.3,
               fontSize: 12,
               color: Colors.white.withOpacity(0.7),
@@ -108,16 +115,57 @@ class LanguageSelector extends StatelessWidget {
 
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => Fireworks(
-                  language: language,
-                  end: now.add(const Duration(seconds: 15)),
-                  year: '${now.year + 1}',
+                builder: (_) => Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Fireworks(
+                      language: language,
+                      end: now.add(const Duration(seconds: 15)),
+                      year: '${now.year + 1}',
+                    ),
+                    _buildBackButton(context, language),
+                  ],
                 ),
               ),
             );
           },
         ),
       ],
+    );
+  }
+
+  Positioned _buildBackButton(BuildContext context, String language) {
+    return Positioned(
+      left: 20,
+      top: 20,
+      child: ClickableArea(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Material(
+          color: Colors.transparent,
+          child: Row(
+            children: [
+              const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 15,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                _back[language]!,
+                style: const TextStyle(
+                  fontFamily: 'Arial',
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
